@@ -1,16 +1,15 @@
-package elevatorapp;
+package todoapp.elevatorapp;
 
 import org.joda.time.LocalDate;
 
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -22,36 +21,29 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+
+
 @javax.jdo.annotations.PersistenceCapable(
         schema = "todo",
         table = "Elevator",
-        identityType= IdentityType.DATASTORE)
+        identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
         column="id")
 @javax.jdo.annotations.Version(
-        strategy= VersionStrategy.VERSION_NUMBER,
+        strategy=VersionStrategy.VERSION_NUMBER,
         column="version")
-@javax.jdo.annotations.Uniques({
-        @javax.jdo.annotations.Unique(
-                name="Elevator_name_must_be_unique",
-                members={"name"})
-})
-
-@DomainObject(auditing = Auditing.ENABLED)
+@DomainObject(
+)
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @RequiredArgsConstructor
-@NoArgsConstructor
-@AllArgsConstructor
-
 public class Elevator implements Comparable<Elevator> {
 
     @Column(allowsNull = "false", length = 30)
@@ -118,18 +110,12 @@ public class Elevator implements Comparable<Elevator> {
 
     //region > injected services
     @javax.inject.Inject
-    @javax.jdo.annotations.NotPersistent
-    @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
     RepositoryService repositoryService;
 
     @javax.inject.Inject
-    @javax.jdo.annotations.NotPersistent
-    @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
     TitleService titleService;
 
     @javax.inject.Inject
-    @javax.jdo.annotations.NotPersistent
-    @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
     MessageService messageService;
     //endregion
 }

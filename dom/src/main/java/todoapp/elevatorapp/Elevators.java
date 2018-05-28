@@ -1,4 +1,4 @@
-package elevatorapp;
+package todoapp.elevatorapp;
 
 import java.util.List;
 
@@ -10,7 +10,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
@@ -25,19 +24,19 @@ import org.apache.isis.applib.services.repository.RepositoryService;
         menuOrder = "11"
 )
 public class Elevators {
+//
+//    @ActionLayout(cssClassFa = "fa fa-plus")
+//    @MemberOrder(sequence = "5")
+//    public Elevator newElevator(
+//            @Parameter(regexPattern = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+//            final String name){
+//        final Elevator ele = container.newTransientInstance(Elevator.class);
+//        ele.setName(name);
+//
+//        return ele;
+//    }
 
-    @ActionLayout(cssClassFa = "fa fa-plus")
-    @MemberOrder(sequence = "5")
-    public Elevator newElevator(
-            @Parameter(regexPattern = "\\w[@&:\\-\\,\\.\\+ \\w]*")
-            final String name){
-        final Elevator ele = container.newTransientInstance(Elevator.class);
-        ele.setName(name);
 
-        return ele;
-    }
-
-    /*
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
     @MemberOrder(sequence = "1")
@@ -56,7 +55,7 @@ public class Elevators {
         return ae;
         //return repositoryService.persist(new Elevator(name));
     }
-    */
+
 
     @javax.inject.Inject
     RepositoryService repositoryService;
