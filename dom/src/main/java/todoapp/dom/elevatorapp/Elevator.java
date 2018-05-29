@@ -1,18 +1,23 @@
-package todoapp.elevatorapp;
+package todoapp.dom.elevatorapp;
+
+import java.math.BigDecimal;
 
 import org.joda.time.LocalDate;
 
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -21,34 +26,44 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
-import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
-
+import todoapp.dom.categories.Category;
+import static todoapp.dom.categories.Category.PROFESSIONAL;
+import todoapp.dom.categories.Subcategory;
+import static todoapp.dom.categories.Subcategory.OPEN_SOURCE;
+import todoapp.dom.todoitem.ToDoItem;
+import todoapp.dom.todoitem.ToDoItems;
 
 @javax.jdo.annotations.PersistenceCapable(
         schema = "todo",
         table = "Elevator",
-        identityType=IdentityType.DATASTORE)
+        identityType= IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
         column="id")
 @javax.jdo.annotations.Version(
-        strategy=VersionStrategy.VERSION_NUMBER,
+        strategy= VersionStrategy.VERSION_NUMBER,
         column="version")
-@DomainObject(
-)
-@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+@javax.jdo.annotations.Unique(name="Elevator_name_UNQ", members = {"name"})
+@DomainObject(auditing = Auditing.ENABLED)
+@DomainObjectLayout()   // causes UI events to be triggered
+
 @RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class Elevator implements Comparable<Elevator> {
 
     @Column(allowsNull = "false", length = 30)
     @NonNull
-    @Property
+    @Property(editing = Editing.ENABLED)
     @Setter
     @Getter
     @Title
@@ -98,9 +113,16 @@ public class Elevator implements Comparable<Elevator> {
     @Getter
     private String description;
 
-    // 维护，更新上一次维护日期，确定下一次维护日期，并创建一个todo
-    public void Maintain(){
+    private ToDoItem eletodo;
 
+    // 维护，更新上一次维护日期，确定下一次维护日期，并创建一个todo
+    @Action()
+    public void SetToDo(){
+        String eletododes = "Elevator Maintain for [" + this.name +"]";
+        LocalDate eletodoNextDate = this.getNextMaintainDate();
+
+        eletodo = new ToDoItem(eletododes, eletodoNextDate);
+        //eletodo.add(eletodo);
     }
 
     @Override

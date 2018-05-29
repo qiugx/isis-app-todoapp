@@ -35,7 +35,7 @@
                                     <c:describedAs>Deletes this object from the persistent datastore</c:describedAs>
                                 </c:action>
                                 <c:property id="name" namedEscaped="true"/>
-                                <c:property id="description" namedEscaped="true" multiLine="10" hidden="ALL_TABLES"/>
+                                <c:property id="description" namedEscaped="true" multiLine="5" hidden="ALL_TABLES"/>
                                 <c:property id="lastMaintainDate" namedEscaped="true"/>
                                 <c:property id="nextMaintainDate" namedEscaped="true"/>
                             </c:fieldSet>
